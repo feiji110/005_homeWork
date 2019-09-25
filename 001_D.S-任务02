@@ -1,0 +1,170 @@
+```C
+#include <stdio.h>
+ 
+#define LIST_INITSIZE 100
+#define ElemType int
+#define Status int
+#define OK     1
+#define ERROR  0
+typedef struct
+{
+
+       ElemType elem[LIST_INITSIZE];
+
+       int length;
+
+}SqList;
+Status InitList_Sq(SqList *L)
+{
+	L->length = 0;	
+	return OK;
+} 
+void ListPrint(SqList L){	
+	int i = 0;
+	for(i=0;i<L.length;++i){
+		printf("%d ",L.elem[i]);
+	} 
+	printf("\n");
+}
+void DeleteElem(SqList *L)
+{
+	int i,j;
+	int data3 = L->elem[2];
+	int data6 = L->elem[5];
+	for(i=0;i<L->length;++i){
+		if( L->elem[i]>data3&&L->elem[i]<data6){
+			for(j=i;j<L->length;++j)
+				L->elem[j]=L->elem[j+1];
+			i--;
+			L->length--;
+		}
+	}
+}
+
+Status ListInsert(SqList *L,int i,ElemType e)
+{
+	int k;
+	if (L->length==LIST_INITSIZE)/*顺序表已满*/ 
+		return ERROR;
+	if (i<1 || i>L->length+1)/*i不在范围内*/ 
+		return ERROR;
+	if (i<=L->length)/*若插入数据不在表尾*/ 
+	{
+		for(k=L->length-1;k>=i-1;k--)
+			L->elem[k+1]=L->elem[k];
+	}
+	L->elem[i-1]=e;/*插入新元素*/
+	L->length++; 
+	return OK;
+}
+ 
+int main(void)
+{
+   SqList L;
+   int i = 0;
+   ElemType e;
+   ElemType data[9] = {10,263,-32,-3,-25,88,77,0,-9};
+   InitList_Sq(&L);
+   for(i = 1;i <= 9;i++)
+      ListInsert(&L,i,data[i-1]);
+
+   printf("插入完成后L = : ");
+   ListPrint(L);
+   DeleteElem(&L);
+   printf("删除比第三个元素大的且比第六个元素小的数据元素： ");
+   ListPrint(L);
+   system("pause");
+   return 0;
+}
+````
+````C#include <stdio.h>
+#include <stdlib.h>
+
+#define LIST_INIT_SIZE 100
+#define LISTINCREMENT 10
+#define Status int
+#define OVERFLOW -1
+#define OK 1
+#define ERROR 0
+#define ElemType int
+
+typedef struct
+{
+       ElemType * elem;
+       int length;
+       int listsize;
+}SqList;
+
+Status InitList_Sq(SqList *L){
+	L->elem =(ElemType *)malloc(LIST_INIT_SIZE*sizeof(ElemType));
+	if(!L->elem)
+		return ERROR;
+	L->length = 0;
+	L->listsize = LIST_INIT_SIZE;
+	return OK;  
+}
+Status ListInsert_Sq(SqList *L,int i,ElemType e)
+{
+	int k;
+	if (L->length==LIST_INIT_SIZE)/*顺序表已满*/ 
+		return ERROR;
+	if (i<1 || i>L->length+1)/*i不在范围内*/ 
+		return ERROR;
+	if (i<=L->length)/*若插入数据不在表尾*/ 
+	{
+		for(k=L->length-1;k>=i-1;k--)
+			L->elem[k+1]=L->elem[k];
+	}
+	L->elem[i-1]=e;/*插入新元素*/
+	L->length++; 
+	return OK;
+}
+void ListPrint_Sq(SqList L)
+{
+	int i = 0;
+	for(i=0;i<L.length;++i){
+		printf("%d ",L.elem[i]);
+	} 
+	printf("\n");
+}
+
+void PartList(SqList *La)
+{
+    int i,j,temp;
+    for(i=0;i<La->length;++i){
+    	for(j=0;j<La->length;++j){
+    		if(La->elem[i]<0){
+    			for(j=i+1;j<La->length;++j){
+    				if(La->elem[j]>=0){
+    					temp = La->elem[i];
+    					La->elem[i] = La->elem[j];
+						La->elem[j] = temp;
+						break;
+ 					}
+				}
+			}
+		}
+	}
+
+}
+
+int main(void)
+{
+    SqList L;
+    int i=0;
+    ElemType e;
+    ElemType data[9] = {10,263,-32,-3,-25,88,77,0,-9};
+    InitList_Sq(&L);
+    for(i = 0;i < 9; i++)
+       ListInsert_Sq(&L,i+1,data[i]);
+	printf("插入完成后 L = : ");
+    ListPrint_Sq(L);
+    printf("%d\n",L.length);
+    
+    PartList(&L);
+    printf("元素分类后的线性表：");
+    ListPrint_Sq(L);
+    system("pause");
+    return 0;
+}
+````
