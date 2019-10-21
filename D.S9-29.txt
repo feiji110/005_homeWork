@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Node
+{
+	int data;
+	struct Node *next;	
+}Node,*LinkList; 
+void insert(LinkList h, int n)
+{	
+	//记录表尾指针，插入
+	//要想在函数中更改变量值，必须在实参中传递变量地址 
+	int i;
+	LinkList cur,tail = h;
+	for(i = 0;i < n;i++)
+	{
+		cur = (LinkList)malloc(sizeof(Node));
+		scanf("%d",&cur->data);
+		cur->next = NULL; 
+		tail->next = cur;
+		tail = cur;
+	}	
+}
+void visit(LinkList h)
+{
+	LinkList ahead = h->next;
+	for(;ahead;ahead = ahead->next)
+	{
+		printf("%d ",ahead->data);
+	}
+	printf("\n");
+}
+int len(LinkList h)
+{
+	int i = 0;
+	LinkList ahead = h->next;
+	for(;ahead;ahead = ahead->next)
+		++i;
+	return i;
+	
+}
+int findrIth(LinkList h,int i)
+{
+	int lenofth = len(h);
+	int j = 1;
+	h = h->next;
+	while(j < lenofth-i+1)
+	{
+		h = h->next;
+		i++;
+	}
+	return h->data;
+}
+int main(void)
+{
+	int length;int  e;
+	LinkList head = (LinkList)malloc(sizeof(Node));
+	head->next = NULL;
+	insert(head,4);
+	length = len(head);
+	visit(head);
+	e = findrIth(head,2);
+	printf("length: %d\n",length);
+	printf("reverse 2th is %d",e);
+	return 0;	
+} 
