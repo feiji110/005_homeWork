@@ -124,7 +124,6 @@ public class Point {
 ````
 2. Line 
 ````java
-
 public class Line {
 	private Point a;
 	private Point b;
@@ -155,9 +154,10 @@ public class Line {
 	public double getLength() {
 		return Math.sqrt((a.getX()-b.getX())*(a.getX()-b.getX())+(a.getY()-b.getY())*(a.getY()-b.getY()));
 	}
-//	相等为1不等为0
-	public int equals(Line l2) {
-		if((this.a.equals(l2.a)==1&&this.b.equals(l2.b)==1)||(this.a.equals(l2.b)==1&&this.b.equals(l2.a)==1)) {
+//	两线平行或重合为1，其余为0
+	public int collinear(Line l2) {
+		if((this.a.getX()-this.b.getX()) * (l2.a.getY()-l2.b.getY() ) == 
+				(this.a.getY()-this.b.getY())*(l2.a.getX()-l2.b.getX())) {
 			return 1;
 		}else {
 			return 0;
@@ -172,20 +172,20 @@ public class Triangle {
 	private Line l1;
 	private Line l2;
 	public Triangle(Point p1,Point p2,Point p3) {
-		if(p1.equals(p2)==1&&p1.equals(p3)==1) {
-			System.out.println("Three point superposition");
-		}else if((p1.equals(p2)==1&&p1.equals(p3)==0)||(p1.equals(p3)==1&&p2.equals(p2)==0)||(p2.equals(p3)==1&&p2.equals(p1)==0)) {
-			System.out.println("Two point superposition");
-		}else {
 			Line l1 = new Line(p1,p2);
 			Line l2 = new Line(p1,p3);
-			this.l1 = l1;
-			this.l2 = l2;
-		}
+			if(l1.collinear(l2)==1){
+				System.out.println("Two line collinear");
+			}else if(l1.getA().equals(l2.getA())==1||l1.getA().equals(l2.getB())==1||l1.getB().equals(l2.getA())==1||l1.getB().equals(l2.getB())==1) {
+				this.l1 = l1;
+				this.l2 = l2;
+			}else {
+				System.out.println("Wrong Example");
+			}	
 	}
 	public Triangle(Line l1,Line l2) {
-		if(l1.equals(l2)==1){
-			System.out.println("Two line superposition");
+		if(l1.collinear(l2)==1){
+			System.out.println("Two line collinear");
 		}else if(l1.getA().equals(l2.getA())==1||l1.getA().equals(l2.getB())==1||l1.getB().equals(l2.getA())==1||l1.getB().equals(l2.getB())==1) {
 			this.l1 = l1;
 			this.l2 = l2;
@@ -194,11 +194,6 @@ public class Triangle {
 		}
 	}
 	public Triangle() {
-/*没有内存？？*/
-//		l1.setA(0,0);
-//		l1.setB(0,1);
-//		l2.setA(0,0);
-//		l2.setB(1,1);
 		Point p1 = new Point(0,0);
 		Point p2 = new Point(1,1);
 		Point p3 = new Point(0,1);
@@ -239,6 +234,7 @@ public class Triangle {
 		return l1.getLength()+l2.getLength()+L3Length();
 	}
 }
+
 ````
 4.Test
 ````java
@@ -257,7 +253,6 @@ public class Title04_3 {
 		System.out.println(t1.getCircumference());
 		System.out.println("有1个接收2个线段类对象作为参数的构造方法");
 		Triangle t2 = new Triangle(l1,l2);	
-		System.out.println(t2.L3Length());
 		System.out.println(t2.getCircumference());
 		System.out.println("有1个无参构造方法:");
 		Triangle t3 = new Triangle();
